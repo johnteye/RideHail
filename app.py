@@ -14,7 +14,8 @@ import os
 app = Flask(__name__)
 
 # Database configuration
-engine = create_engine('postgresql://localhost/ride_hailing_db')
+DATABASE_URL = os.getenv('DATABASE_URL')
+engine = create_engine('DATABASE_URL')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
 
