@@ -9,7 +9,6 @@ from datetime import datetime
 import threading
 import time
 from twilio.rest import Client
-import re
 import os
 
 app = Flask(__name__)
