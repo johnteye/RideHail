@@ -9,7 +9,6 @@ from datetime import datetime
 import threading
 import time
 from twilio.rest import Client
-import uuid
 
 from decouple import config
 
@@ -208,8 +207,7 @@ def sms_reply():
             
     else:
         # New user flow
-        user_id = uuid.uuid4().hex 
-        user = User(id=user_id, phone_number=from_number, state='awaiting_name')
+        user = User(phone_number=from_number, state='awaiting_name')
         session.add(user)
         session.commit()
         message.body("Welcome to Ride-Hailing App! Please enter your full name:")
