@@ -2,27 +2,34 @@
 from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 from models import Base, User, Ride
 import random
 from datetime import datetime
 import threading
 import time
 from twilio.rest import Client
-import os
+
+from decouple import config
 
 app = Flask(__name__)
 
-# Database configuration
-DATABASE_URL = os.getenv('DATABASE_URL')
-engine = create_engine('DATABASE_URL')
-Base.metadata.create_all(engine)
+
+
+# SQLAlchemy setup
+DATABASE_URL = config('DATABASE_URL')  # Read from .env or environment
+engine = create_engine(DATABASE_URL)   # Create the SQLAlchemy engine
+Base = declarative_base()              # Declare the base for ORM models
+Base.metadata.create_all(engine)       # Create all tables
+
+# Session setup
 Session = sessionmaker(bind=engine)
 
+
 # Twilio credentials (replace with your own)
-ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID')
-AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN')
-WHATSAPP_NUMBER = os.getenv('TWILIO_WHATSAPP_NUMBER')
+ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
+AUTH_TOKEN =  config('TWILIO_AUTH_TOKEN')
+WHATSAPP_NUMBER =  config('TWILIO_WHATSAPP_NUMBER')
 
 client = Client(ACCOUNT_SID, AUTH_TOKEN)
 
